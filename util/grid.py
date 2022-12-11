@@ -24,3 +24,10 @@ class Grid:
     @staticmethod
     def filled(w, h, default=None):
         return Grid([[default] * w for _ in range(h)])
+
+    def __repr__(self):
+        return f"Grid(w={self.w},h={self.h},arr={self.arr})"
+
+    def __str__(self, h_join="", v_join="\n"):
+        return v_join.join(map(h_join.join, self.arr))
+
