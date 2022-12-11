@@ -7,6 +7,7 @@ import importlib
 import sys
 import itertools
 import glob
+import json
 
 
 def parser():
@@ -66,7 +67,7 @@ def get_input(day_num, use_sample):
         out_file = os.path.join(dir_name, f"out{in_tag}")
         if os.path.exists(out_file):
             with open(out_file) as f:
-                answers = list(map(lambda l: l.rstrip("\n"), f.readlines()))
+                answers = json.loads(f.read())
                 part1_ans = answers[0] if answers[0] != "None" else None
                 part2_ans = answers[1] if answers[1] != "None" else None
 
@@ -93,7 +94,7 @@ def colorize(s, color):
 def get_status(result, ans):
     if ans is None:
         return colorize("(????)", tty_yel)
-    elif str(result) == ans:
+    elif str(result) == str(ans):
         return colorize("(PASS)", tty_grn)
     else:
         return colorize(f"(FAIL) {ans}", tty_red)
