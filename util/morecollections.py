@@ -1,5 +1,3 @@
-import collections
-
 def consume_deque(d, from_left=False):
     done = False
     while not done:

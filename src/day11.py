@@ -36,9 +36,11 @@ class TestFunc(ReprFunc):
                          f"({modulus} | v ? {true_num} : {false_num})")
         self.modulus = modulus
 
-def parse_op(l):
-    expr = l.split()[3:]
+
+def parse_op(s):
+    expr = s.split()[3:]
     v1, op, v2 = expr
+
     def op_func(o):
         nonlocal expr
         nonlocal v1, op, v2
@@ -69,10 +71,11 @@ def parse_test(test_strs):
 
 def parse(ls, reduce_worry):
     monkeys = []
-    while (monk_str := list(itool.takewhile(lambda l: l != "", ls))):
+    while (monk_str := list(itool.takewhile(lambda s: s != "", ls))):
         m_args = {}
         m_args["num"] = int(monk_str[0].rstrip(":").split()[1])
-        m_args["items"] = c.deque(map(lambda s: int(s.rstrip(",")), monk_str[1].split()[2:]))
+        m_args["items"] = c.deque(map(lambda s: int(s.rstrip(",")),
+                                      monk_str[1].split()[2:]))
         m_args["op"] = parse_op(monk_str[2])
         m_args["test"] = parse_test(monk_str[3:])
         m_args["reduce_worry"] = reduce_worry
@@ -104,10 +107,11 @@ def part2(ls):
     monkeys = parse(ls, None)
 
     # in this part the worry levels get very large, reduce mod lcm
-    # using lcm of all moduli preserves divisibility tests 
+    # using lcm of all moduli preserves divisibility tests
     reduction_mod = math.lcm(*(m.test.modulus for m in monkeys))
     for m in monkeys:
-        m.reduce_worry = ReprFunc(lambda w: w % reduction_mod, f"(w%{reduction_mod})")
+        m.reduce_worry = ReprFunc(lambda w: w % reduction_mod,
+                                  f"(w%{reduction_mod})")
 
     simulate(monkeys, 10000)
     m1, m2 = moreiters.top_n((m.inspect_count for m in monkeys), 2)

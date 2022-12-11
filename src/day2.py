@@ -1,22 +1,23 @@
-import logging
-
+import util.logging as log
 from enum import Enum, auto
-from abc import ABC
+
 
 class Shape(Enum):
-    ROCK     = auto()
-    PAPER    = auto()
+    ROCK = auto()
+    PAPER = auto()
     SCISSORS = auto()
 
-beats = { 
-    Shape.ROCK: Shape.SCISSORS, 
+
+beats = {
+    Shape.ROCK: Shape.SCISSORS,
     Shape.PAPER: Shape.ROCK,
     Shape.SCISSORS: Shape.PAPER
 }
 
+
 loses = {
-    Shape.SCISSORS: Shape.ROCK, 
-    Shape.ROCK: Shape.PAPER, 
+    Shape.SCISSORS: Shape.ROCK,
+    Shape.ROCK: Shape.PAPER,
     Shape.PAPER: Shape.SCISSORS
 }
 
@@ -29,58 +30,56 @@ def compare_shapes(s1, s2):
     else:
         return -1
 
+
 shape_scores = {
     Shape.ROCK: 1,
     Shape.PAPER: 2,
     Shape.SCISSORS: 3
 }
 
-them_to_shape = { 
-    "A": Shape.ROCK, 
-    "B": Shape.PAPER, 
-    "C": Shape.SCISSORS, 
+them_to_shape = {
+    "A": Shape.ROCK,
+    "B": Shape.PAPER,
+    "C": Shape.SCISSORS,
 }
 
-us_to_shape = { 
-    "X": Shape.ROCK, 
-    "Y": Shape.PAPER, 
-    "Z": Shape.SCISSORS, 
+us_to_shape = {
+    "X": Shape.ROCK,
+    "Y": Shape.PAPER,
+    "Z": Shape.SCISSORS,
 }
+
 
 def score_round(them, us):
     round_score = 0
-    result = compare_shapes(them, us) 
-    if result == 0: # draw
+    result = compare_shapes(them, us)
+    if result == 0:  # draw
         round_score += 3
-    elif result > 0: # win
+    elif result > 0:  # win
         round_score += 6
     round_score += shape_scores[us]
     return round_score
 
 
-part1_log = logging.getLogger("part1")
-
 def part1(ls):
     score = 0
-    for l in ls:
-        shapes = l.split()
+    for s in ls:
+        shapes = s.split()
         them = them_to_shape[shapes[0]]
         us = us_to_shape[shapes[1]]
 
         round_score = score_round(them, us)
-        
-        part1_log.debug(f"{them=}, {us=}, {round_score=}")
+
+        log.p1_log.debug(f"{them=}, {us=}, {round_score=}")
         score += round_score
 
     return score
 
 
-part2_log = logging.getLogger("part2")
-
 def part2(ls):
     score = 0
-    for l in ls:
-        shapes = l.split()
+    for s in ls:
+        shapes = s.split()
         them = them_to_shape[shapes[0]]
 
         desired_result = shapes[1]
@@ -93,10 +92,9 @@ def part2(ls):
         elif desired_result == "Z":
             us = loses[them]
 
-
         round_score = score_round(them, us)
-        
-        part2_log.debug(f"{them=}, {us=}, {desired_result=}, {round_score=}")
+
+        log.p2_log.debug(f"{them=}, {us=}, {desired_result=}, {round_score=}")
         score += round_score
 
     return score

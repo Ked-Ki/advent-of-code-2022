@@ -1,13 +1,13 @@
-import logging
+import util.logging as log
 
 from util.moreiters import consume, batch_at
-import textwrap
+
 
 class FileTreeNode():
     def __init__(self, name):
         self.name = name
         self.files = {}
-        self.dirs = {} 
+        self.dirs = {}
         self.total_size = 0
 
     def insert_file(self, name, size):
@@ -33,9 +33,9 @@ class FileTreeNode():
 def build_file_tree(lines):
     cur_path = []
     root_node = None
-    for cmd_l in batch_at(iter(lines), lambda l: l[0] == '$'):
+    for cmd_l in batch_at(iter(lines), lambda s: s[0] == '$'):
         cmd = next(cmd_l).split()
-        logging.debug(f'{cur_path=}, {cmd=}')
+        log.parse_log.debug(f'{cur_path=}, {cmd=}')
         if cmd[1] == "cd":
             folder = cmd[2]
             if folder == "..":
@@ -64,7 +64,8 @@ def build_file_tree(lines):
 def part1(lines):
     file_tree = build_file_tree(lines)
 
-    return sum(size for d in file_tree.traverse_dirs() if (size := d.total_size) <= 100000)
+    return sum(size for d in file_tree.traverse_dirs()
+               if (size := d.total_size) <= 100000)
 
 
 def part2(lines):
@@ -76,5 +77,5 @@ def part2(lines):
 
     space_to_delete = total_needed_space - available_space
 
-    return min(size for d in file_tree.traverse_dirs() \
-                    if (size := d.total_size) >= space_to_delete)
+    return min(size for d in file_tree.traverse_dirs()
+               if (size := d.total_size) >= space_to_delete)

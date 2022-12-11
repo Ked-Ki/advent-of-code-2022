@@ -2,8 +2,8 @@ from itertools import islice, tee
 from collections import Counter
 
 
-def run(l, mark_len):
-    it_l, it_r = tee(iter(l))
+def run(ls, mark_len):
+    it_l, it_r = tee(iter(ls))
     chr_set = Counter(islice(it_r, mark_len))
     r_idx = mark_len
     while len(chr_set.keys()) < mark_len:

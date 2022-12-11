@@ -1,10 +1,11 @@
-import logging
+import util.logging as log
 from itertools import islice
 from functools import reduce
 
-def split_l(l):
-    mid = (len(l) + 1)//2
-    return (l[:mid], l[mid:]) 
+
+def split_l(s):
+    mid = (len(s) + 1)//2
+    return (s[:mid], s[mid:])
 
 
 def chr_to_int(c):
@@ -20,7 +21,7 @@ def part1(ls):
         shared = set(c1) & set(c2)
         item = shared.pop()
         priority = chr_to_int(item)
-        logging.debug(f"{c1=} {c2=} {item=} {priority=}")
+        log.p1_log.debug(f"{c1=} {c2=} {item=} {priority=}")
         total += priority
     return total
 
@@ -28,7 +29,7 @@ def part1(ls):
 def part2(ls):
     total = 0
     while (group := list(islice(ls, 3))):
-        shared = reduce(set.intersection, map(set,group))
+        shared = reduce(set.intersection, map(set, group))
         item = shared.pop()
         total += chr_to_int(item)
     return total

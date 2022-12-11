@@ -8,7 +8,7 @@ class Grid:
         return i >= 0 and i < self.h and j >= 0 and j < self.w
 
     def get(self, i, j, default=None):
-        if self.inbounds(i,j):
+        if self.inbounds(i, j):
             return self.arr[i][j]
         else:
             return default
@@ -17,7 +17,7 @@ class Grid:
         self.update(i, j, lambda _: x)
 
     def update(self, i, j, f):
-        if self.inbounds(i,j):
+        if self.inbounds(i, j):
             c = self.arr[i][j]
             self.arr[i][j] = f(c)
 
@@ -30,4 +30,3 @@ class Grid:
 
     def __str__(self, h_join="", v_join="\n"):
         return v_join.join(map(h_join.join, self.arr))
-

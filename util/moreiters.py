@@ -1,8 +1,10 @@
 import collections
 import bisect
 
+
 def consume(it):
     collections.deque(it, maxlen=0)
+
 
 def batch_at(it, is_new):
     transition = [next(it)]
@@ -27,14 +29,15 @@ def batch_at(it, is_new):
         yield wrapped_iter()
     return
 
+
 def takewhile_inclusive(pred, it):
-    bound = []
     for i in it:
         if pred(i):
             yield i
         else:
             yield i
             break
+
 
 def top_n(it, n):
     top = []

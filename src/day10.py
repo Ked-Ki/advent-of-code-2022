@@ -1,5 +1,5 @@
-import logging
 from util.grid import Grid
+
 
 class State:
     def __init__(self, x=1, cycle=1, tick_hook=None):
@@ -16,23 +16,23 @@ class State:
 
     def run_noop(self):
         self.tick()
-    
+
     def run_addx(self, n):
         self.tick()
         self.tick()
         self.x += n
 
-
-    def run_instr(self, l):
-        if l.startswith("noop"):
+    def run_instr(self, s):
+        if s.startswith("noop"):
             self.run_noop()
-        elif l.startswith("addx"):
-            _, i = l.split()
+        elif s.startswith("addx"):
+            _, i = s.split()
             self.run_addx(int(i))
 
 
 def part1(ls):
     out = 0
+
     def tick_hook(st):
         nonlocal out
         if (st.cycle % 40 == 20):
@@ -41,8 +41,8 @@ def part1(ls):
 
     state = State(tick_hook=tick_hook)
 
-    for l in ls:
-        state.run_instr(l)
+    for s in ls:
+        state.run_instr(s)
 
     return out
 
@@ -66,12 +66,9 @@ def part2(ls):
 
     state = State(tick_hook=tick_hook)
 
-    for l in ls:
-        state.run_instr(l)
+    for s in ls:
+        state.run_instr(s)
 
     result = str(crt)
 
     return f"\n{result}"
-
-
-

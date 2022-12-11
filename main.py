@@ -11,8 +11,8 @@ import json
 
 
 def parser():
-    parser = argparse.ArgumentParser(description=f"run day")
-    parser.add_argument("day_num", nargs="?", default="all", 
+    parser = argparse.ArgumentParser(description="run day")
+    parser.add_argument("day_num", nargs="?", default="all",
                         help="day to run. if absent, run all days")
     parser.add_argument("-s", "--sample", action="store_true",
                         help="use sample input")
@@ -57,7 +57,7 @@ def get_input(day_num, use_sample):
         dir_name = f"inputs/day{day_num}"
 
     found_input = False
-    
+
     for in_path in glob.iglob(os.path.join(dir_name, "in*")):
         found_input = True
         in_tag = os.path.basename(in_path).removeprefix("in")
@@ -83,6 +83,7 @@ tty_red = "\x1b[31m"
 tty_yel = "\x1b[33m"
 tty_rst = "\x1b[0m"
 
+
 def colorize(s, color):
     istty = sys.stdout.isatty()
     if istty:
@@ -100,6 +101,20 @@ def get_status(result, ans):
         return colorize(f"(FAIL) {ans}", tty_red)
 
 
+def run_day(in_path, part1_ans, part2_ans):
+    with open(in_path) as f:
+        print(f"{colorize('input:',tty_blu)} {in_path}")
+        part1_in, part2_in = \
+            itertools.tee(map(lambda s: s.rstrip("\n"),
+                              f.readlines()))
+        part1_res = day.part1(part1_in)
+        part1_stat = get_status(part1_res, part1_ans)
+        print(f"{colorize('part 1:',tty_blu)} {part1_res} {part1_stat}")
+        part2_res = day.part2(part2_in)
+        part2_stat = get_status(part2_res, part2_ans)
+        print(f"{colorize('part 2:',tty_blu)} {part2_res} {part2_stat}")
+
+
 if __name__ == "__main__":
     args = parser().parse_args()
     logging_config(args.debug)
@@ -109,7 +124,7 @@ if __name__ == "__main__":
         days = map(str, range(1, 26))
 
     for day_num in days:
-        try: 
+        try:
             day = import_day(day_num)
         except DayNotFoundError as err:
             if args.day_num != "all":
@@ -120,17 +135,8 @@ if __name__ == "__main__":
         print(f"{colorize('day:',tty_blu)} {day_num}")
 
         try:
-            for in_path, part1_ans, part2_ans in get_input(day_num, args.sample):
-                with open(in_path) as f:
-                    print(f"{colorize('input:',tty_blu)} {in_path}")
-                    part1_in, part2_in = itertools.tee(map(lambda l: l.rstrip("\n"), 
-                                                           f.readlines()))
-                    part1_res = day.part1(part1_in)
-                    part1_stat = get_status(part1_res, part1_ans)
-                    print(f"{colorize('part 1:',tty_blu)} {part1_res} {part1_stat}")
-                    part2_res = day.part2(part2_in)
-                    part2_stat = get_status(part2_res, part2_ans)
-                    print(f"{colorize('part 2:',tty_blu)} {part2_res} {part2_stat}")
+            for run_args in get_input(day_num, args.sample):
+                run_day(*run_args)
         except DayNotFoundError as err:
             print(err)
             sys.exit(1)
