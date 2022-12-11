@@ -1,15 +1,16 @@
-from util.harness import run_day
 import logging
 
 import itertools
 
+parse_log = logging.getLogger("parse")
+
 def parse(ls):
     crates_strs = list(itertools.takewhile(lambda l: l != "", ls))
-    logging.debug(f'{crates_strs=}')
+    parse_log.debug(f'{crates_strs=}')
     crates = parse_crates(crates_strs)
 
-    moves_strs = ls[len(crates_strs)+1:]
-    logging.debug(f'{moves_strs=}')
+    moves_strs = ls 
+    parse_log.debug(f'{moves_strs=}')
     moves = map(parse_move, moves_strs)
 
     return (crates, moves)
@@ -25,10 +26,10 @@ def parse_crates(ls):
             yield ''.join(c).rstrip().strip("[]")
 
     p_rows = list(map(lambda r: list(parse_row(r)), rows))
-    logging.debug(f'{p_rows=}')
+    parse_log.debug(f'{p_rows=}')
 
     stacks = [[r for row in p_rows if (r := row[i])] for i in range(num_crates)]
-    logging.debug(f'{stacks=}')
+    parse_log.debug(f'{stacks=}')
 
     return stacks
 
@@ -76,7 +77,3 @@ def part2(ls):
         logging.debug(f"{cs=}")
 
     return ''.join([c[-1] for c in cs])
-
-
-if __name__ == "__main__":
-    run_day(5, part1, part2)

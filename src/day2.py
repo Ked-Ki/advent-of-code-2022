@@ -1,4 +1,3 @@
-from util.harness import run_day
 import logging
 
 from enum import Enum, auto
@@ -59,6 +58,8 @@ def score_round(them, us):
     return round_score
 
 
+part1_log = logging.getLogger("part1")
+
 def part1(ls):
     score = 0
     for l in ls:
@@ -68,11 +69,13 @@ def part1(ls):
 
         round_score = score_round(them, us)
         
-        # print("them: {}, us: {}, result: {}, score: {}".format(them, us, result, round_score))
+        part1_log.debug(f"{them=}, {us=}, {round_score=}")
         score += round_score
 
     return score
 
+
+part2_log = logging.getLogger("part2")
 
 def part2(ls):
     score = 0
@@ -84,20 +87,16 @@ def part2(ls):
 
         us = None
         if desired_result == "X":
-            us = loses[them]
+            us = beats[them]
         elif desired_result == "Y":
             us = them
         elif desired_result == "Z":
-            us = beats[them]
+            us = loses[them]
 
 
         round_score = score_round(them, us)
         
-        print("them: {}, us: {}, result: {}, score: {}".format(them, us, result, round_score))
+        part2_log.debug(f"{them=}, {us=}, {desired_result=}, {round_score=}")
         score += round_score
 
     return score
-
-
-if __name__ == "__main__":
-    run_day(2, part1, part2)

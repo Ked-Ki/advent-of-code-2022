@@ -1,4 +1,3 @@
-from util.harness import run_day
 import logging
 
 from math import copysign
@@ -35,34 +34,31 @@ class State:
         return f"state({self.knots=})"
 
 
-def run(length):
+def run(length, ls):
     vis = set()
     st = State(length=length)
+    vis.add(st.get_tail())
     for l in ls:
         ws = l.split()
         for _ in range(int(ws[1])):
-            vis.add(st.get_tail())
-            if ws[0] == "r":
+            if ws[0] == "R":
                 st.update_head(1,0)
-            elif ws[0] == "l":
+            elif ws[0] == "L":
                 st.update_head(-1,0)
-            elif ws[0] == "u":
+            elif ws[0] == "U":
                 st.update_head(0,1)
-            elif ws[0] == "d":
+            elif ws[0] == "D":
                 st.update_head(0,-1)
             st.update_tail()
+            vis.add(st.get_tail())
         logging.debug(f"{st=}")
 
     return len(vis)
 
 
 def part1(ls):
-    return run(2)
+    return run(2, ls)
 
 
 def part2(ls):
-    return run(10)
-
-
-if __name__ == "__main__":
-    run_day(9, part1, part2)
+    return run(10, ls)

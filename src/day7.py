@@ -1,7 +1,6 @@
-from util.harness import run_day
 import logging
 
-from util.moreiters import consume
+from util.moreiters import consume, batch_at
 import textwrap
 
 class FileTreeNode():
@@ -29,30 +28,6 @@ class FileTreeNode():
     def __repr__(self):
         return f"FileTreeNode({self.name},files={list(self.files.keys())}," + \
                f"dirs={list(self.dirs.keys())},total_size={self.total_size})"
-
-
-def batch_at(it, is_new):
-    transition = [next(it)]
-    done = False
-    while not done:
-        def batch_iter():
-            for i in it:
-                if not is_new(i):
-                    yield i
-                else:
-                    transition.append(i)
-                    return
-            nonlocal done
-            done = True
-
-        def wrapped_iter():
-            nonlocal transition
-            yield from transition
-            transition = []
-            yield from batch_iter()
-
-        yield wrapped_iter()
-    return
 
 
 def build_file_tree(lines):
@@ -103,6 +78,3 @@ def part2(lines):
 
     return min(size for d in file_tree.traverse_dirs() \
                     if (size := d.total_size) >= space_to_delete)
-
-if __name__ == "__main__":
-    run_day(7, part1, part2)
