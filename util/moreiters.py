@@ -1,4 +1,5 @@
 import collections
+import bisect
 
 def consume(it):
     collections.deque(it, maxlen=0)
@@ -34,3 +35,10 @@ def takewhile_inclusive(pred, it):
         else:
             yield i
             break
+
+def top_n(it, n):
+    top = []
+    for i in it:
+        bisect.insort(top, i)
+        top = top[-n:]
+    return top
