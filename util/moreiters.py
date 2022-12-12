@@ -10,6 +10,7 @@ def batch_at(it, is_new):
     transition = [next(it)]
     done = False
     while not done:
+
         def batch_iter():
             for i in it:
                 if not is_new(i):

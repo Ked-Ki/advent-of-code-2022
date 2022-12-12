@@ -7,8 +7,7 @@ from util.grid import Grid
 
 def part1(ls):
     grid = Grid([[int(t) for t in row] for row in ls])
-    blocks = {d: Grid.filled(grid.w, grid.h, default=0)
-              for d in ["L", "D", "U", "R"]}
+    blocks = {d: Grid.filled(grid.w, grid.h, default=0) for d in ["L", "D", "U", "R"]}
 
     LU_vis = set()
     RD_vis = set()
@@ -54,8 +53,9 @@ def part2(ls):
                 exists = itool.takewhile(lambda s: s is not None, ts)
                 return takewhile_inclusive(lambda s: s < t, exists)
 
-            dir_scores = [sum(1 for s in filter_visible(ts))
-                          for ts in [l_ts, r_ts, u_ts, d_ts]]
+            dir_scores = [
+                sum(1 for s in filter_visible(ts)) for ts in [l_ts, r_ts, u_ts, d_ts]
+            ]
 
             log.p2_log.debug(f"{dir_scores=}")
 

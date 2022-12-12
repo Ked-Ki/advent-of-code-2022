@@ -11,14 +11,14 @@ class Shape(Enum):
 beats = {
     Shape.ROCK: Shape.SCISSORS,
     Shape.PAPER: Shape.ROCK,
-    Shape.SCISSORS: Shape.PAPER
+    Shape.SCISSORS: Shape.PAPER,
 }
 
 
 loses = {
     Shape.SCISSORS: Shape.ROCK,
     Shape.ROCK: Shape.PAPER,
-    Shape.PAPER: Shape.SCISSORS
+    Shape.PAPER: Shape.SCISSORS,
 }
 
 
@@ -31,11 +31,7 @@ def compare_shapes(s1, s2):
         return -1
 
 
-shape_scores = {
-    Shape.ROCK: 1,
-    Shape.PAPER: 2,
-    Shape.SCISSORS: 3
-}
+shape_scores = {Shape.ROCK: 1, Shape.PAPER: 2, Shape.SCISSORS: 3}
 
 them_to_shape = {
     "A": Shape.ROCK,

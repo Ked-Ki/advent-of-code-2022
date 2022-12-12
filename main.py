@@ -12,10 +12,10 @@ import json
 
 def parser():
     parser = argparse.ArgumentParser(description="run day")
-    parser.add_argument("day_num", nargs="?", default="all",
-                        help="day to run. if absent, run all days")
-    parser.add_argument("-s", "--sample", action="store_true",
-                        help="use sample input")
+    parser.add_argument(
+        "day_num", nargs="?", default="all", help="day to run. if absent, run all days"
+    )
+    parser.add_argument("-s", "--sample", action="store_true", help="use sample input")
     parser.add_argument("-d", "--debug", nargs="*", help="print logs")
 
     return parser
@@ -104,9 +104,7 @@ def get_status(result, ans):
 def run_day(in_path, part1_ans, part2_ans):
     with open(in_path) as f:
         print(f"{colorize('input:',tty_blu)} {in_path}")
-        part1_in, part2_in = \
-            itertools.tee(map(lambda s: s.rstrip("\n"),
-                              f.readlines()))
+        part1_in, part2_in = itertools.tee(map(lambda s: s.rstrip("\n"), f.readlines()))
         part1_res = day.part1(part1_in)
         part1_stat = get_status(part1_res, part1_ans)
         print(f"{colorize('part 1:',tty_blu)} {part1_res} {part1_stat}")

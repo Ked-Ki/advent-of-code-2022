@@ -35,7 +35,7 @@ def part1(ls):
 
     def tick_hook(st):
         nonlocal out
-        if (st.cycle % 40 == 20):
+        if st.cycle % 40 == 20:
             cur_strength = st.cycle * st.x
             out += cur_strength
 

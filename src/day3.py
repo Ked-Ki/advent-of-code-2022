@@ -4,15 +4,15 @@ from functools import reduce
 
 
 def split_l(s):
-    mid = (len(s) + 1)//2
+    mid = (len(s) + 1) // 2
     return (s[:mid], s[mid:])
 
 
 def chr_to_int(c):
     if c.islower():
-        return ord(c) - ord('a') + 1
+        return ord(c) - ord("a") + 1
     else:
-        return ord(c) - ord('A') + 1 + 26
+        return ord(c) - ord("A") + 1 + 26
 
 
 def part1(ls):
@@ -28,7 +28,7 @@ def part1(ls):
 
 def part2(ls):
     total = 0
-    while (group := list(islice(ls, 3))):
+    while group := list(islice(ls, 3)):
         shared = reduce(set.intersection, map(set, group))
         item = shared.pop()
         total += chr_to_int(item)

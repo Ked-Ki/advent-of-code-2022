@@ -17,8 +17,10 @@ class Monkey:
         self.reduce_worry = reduce_worry
 
     def __repr__(self):
-        return f"Monkey({self.num=},{self.items=},{self.op=}," + \
-               f"{self.test=},{self.inspect_count=},{self.reduce_worry=})"
+        return (
+            f"Monkey({self.num=},{self.items=},{self.op=},"
+            + f"{self.test=},{self.inspect_count=},{self.reduce_worry=})"
+        )
 
     def throw_all(self):
         for item in morec.consume_deque(self.items, from_left=True):
@@ -32,8 +34,10 @@ class Monkey:
 
 class TestFunc(ReprFunc):
     def __init__(self, modulus, true_num, false_num):
-        super().__init__(lambda v: true_num if v % modulus == 0 else false_num,
-                         f"({modulus} | v ? {true_num} : {false_num})")
+        super().__init__(
+            lambda v: true_num if v % modulus == 0 else false_num,
+            f"({modulus} | v ? {true_num} : {false_num})",
+        )
         self.modulus = modulus
 
 
@@ -58,6 +62,7 @@ def parse_op(s):
             return pv1 * pv2
         elif op == "+":
             return pv1 + pv2
+
     return ReprFunc(op_func, f"({v1} {op} {v2})")
 
 
@@ -71,11 +76,12 @@ def parse_test(test_strs):
 
 def parse(ls, reduce_worry):
     monkeys = []
-    while (monk_str := list(itool.takewhile(lambda s: s != "", ls))):
+    while monk_str := list(itool.takewhile(lambda s: s != "", ls)):
         m_args = {}
         m_args["num"] = int(monk_str[0].rstrip(":").split()[1])
-        m_args["items"] = c.deque(map(lambda s: int(s.rstrip(",")),
-                                      monk_str[1].split()[2:]))
+        m_args["items"] = c.deque(
+            map(lambda s: int(s.rstrip(",")), monk_str[1].split()[2:])
+        )
         m_args["op"] = parse_op(monk_str[2])
         m_args["test"] = parse_test(monk_str[3:])
         m_args["reduce_worry"] = reduce_worry
@@ -110,8 +116,7 @@ def part2(ls):
     # using lcm of all moduli preserves divisibility tests
     reduction_mod = math.lcm(*(m.test.modulus for m in monkeys))
     for m in monkeys:
-        m.reduce_worry = ReprFunc(lambda w: w % reduction_mod,
-                                  f"(w%{reduction_mod})")
+        m.reduce_worry = ReprFunc(lambda w: w % reduction_mod, f"(w%{reduction_mod})")
 
     simulate(monkeys, 10000)
     m1, m2 = moreiters.top_n((m.inspect_count for m in monkeys), 2)

@@ -26,8 +26,7 @@ class State:
             ddx = int(copysign(1, dx)) if dx else 0
             ddy = int(copysign(1, dy)) if dy else 0
             log.run_log.debug(f"updating tail: {dx=}, {ddx=}, {dy=}, {ddy=}")
-            self.knots[idx2] = (self.knots[idx2][0] + ddx,
-                                self.knots[idx2][1] + ddy)
+            self.knots[idx2] = (self.knots[idx2][0] + ddx, self.knots[idx2][1] + ddy)
         log.run_log.debug(f"updated tail: {self=}")
 
     def __repr__(self):

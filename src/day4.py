@@ -8,8 +8,9 @@ def point_in(p, r):
 
 
 def included(r1, r2):
-    return all(map(lambda p: point_in(p, r2), r1)) or \
-           all(map(lambda p: point_in(p, r1), r2))
+    return all(map(lambda p: point_in(p, r2), r1)) or all(
+        map(lambda p: point_in(p, r1), r2)
+    )
 
 
 def part1(ls):
@@ -17,8 +18,9 @@ def part1(ls):
 
 
 def overlap(r1, r2):
-    return any(map(lambda p: point_in(p, r2), r1)) or \
-           any(map(lambda p: point_in(p, r1), r2))
+    return any(map(lambda p: point_in(p, r2), r1)) or any(
+        map(lambda p: point_in(p, r1), r2)
+    )
 
 
 def part2(ls):
