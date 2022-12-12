@@ -2,7 +2,7 @@ import util.logging as log
 import functools
 import itertools as itool
 from util.moreiters import takewhile_inclusive
-from util.grid import Grid
+from util.grid import Grid, Dir
 
 
 def part1(ls):
@@ -15,8 +15,8 @@ def part1(ls):
     for i in range(grid.h):
         for j in range(grid.w):
             t = grid.get(i, j)
-            l_blk = blocks["L"].get(i, j - 1, default=-1)
-            u_blk = blocks["U"].get(i - 1, j, default=-1)
+            l_blk = blocks["L"].get(*Dir.L.add(i, j), default=-1)
+            u_blk = blocks["U"].get(*Dir.U.add(i, j), default=-1)
             if l_blk < t or u_blk < t:
                 LU_vis.add((i, j))
             blocks["L"].set(i, j, max(l_blk, t))
@@ -25,8 +25,8 @@ def part1(ls):
     for i in range(grid.h - 1, -1, -1):
         for j in range(grid.w - 1, -1, -1):
             t = grid.get(i, j)
-            r_blk = blocks["R"].get(i, j + 1, default=-1)
-            d_blk = blocks["D"].get(i + 1, j, default=-1)
+            r_blk = blocks["R"].get(*Dir.R.add(i, j), default=-1)
+            d_blk = blocks["D"].get(*Dir.D.add(i, j), default=-1)
             if r_blk < t or d_blk < t:
                 RD_vis.add((i, j))
             blocks["R"].set(i, j, max(r_blk, t))
@@ -44,18 +44,15 @@ def part2(ls):
         for j in range(grid.w):
             t = grid.get(i, j)
 
-            l_ts = (grid.get(i, j - d) for d in itool.count(1))
-            r_ts = (grid.get(i, j + d) for d in itool.count(1))
-            u_ts = (grid.get(i - d, j) for d in itool.count(1))
-            d_ts = (grid.get(i + d, j) for d in itool.count(1))
+            trees_in_dir = (
+                (grid.get(*d.add(i, j, n=n)) for n in itool.count(1)) for d in Dir
+            )
 
             def filter_visible(ts):
                 exists = itool.takewhile(lambda s: s is not None, ts)
                 return takewhile_inclusive(lambda s: s < t, exists)
 
-            dir_scores = [
-                sum(1 for s in filter_visible(ts)) for ts in [l_ts, r_ts, u_ts, d_ts]
-            ]
+            dir_scores = [sum(1 for s in filter_visible(ts)) for ts in trees_in_dir]
 
             log.p2_log.debug(f"{dir_scores=}")
 

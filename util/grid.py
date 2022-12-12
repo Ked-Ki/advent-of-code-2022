@@ -1,3 +1,23 @@
+from enum import Enum, auto
+
+
+class Dir(Enum):
+    L = auto()
+    R = auto()
+    U = auto()
+    D = auto()
+
+    def add(self, i, j, n=1):
+        if self == Dir.L:
+            return (i - n, j)
+        elif self == Dir.R:
+            return (i + n, j)
+        elif self == Dir.U:
+            return (i, j - n)
+        elif self == Dir.D:
+            return (i, j + n)
+
+
 class Grid:
     def __init__(self, arr):
         self.arr = arr
@@ -12,6 +32,9 @@ class Grid:
             return self.arr[i][j]
         else:
             return default
+
+    def get_offset(self, i, j, d, num=1):
+        pass
 
     def set(self, i, j, x):
         self.update(i, j, lambda _: x)
