@@ -6,7 +6,7 @@ from util.grid import Grid, Dir
 
 
 def part1(ls):
-    grid = Grid([[int(t) for t in row] for row in ls])
+    grid = Grid.from_str(ls, chr_to_v=int)
     blocks = {d: Grid.filled(grid.w, grid.h, default=0) for d in ["L", "D", "U", "R"]}
 
     LU_vis = set()
@@ -36,7 +36,7 @@ def part1(ls):
 
 
 def part2(ls):
-    grid = Grid([[int(t) for t in row] for row in ls])
+    grid = Grid.from_str(ls, chr_to_v=int)
 
     max_score = 0
 

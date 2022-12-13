@@ -9,13 +9,13 @@ class Dir(Enum):
 
     def add(self, i, j, n=1):
         if self == Dir.L:
-            return (i - n, j)
-        elif self == Dir.R:
-            return (i + n, j)
-        elif self == Dir.U:
             return (i, j - n)
-        elif self == Dir.D:
+        elif self == Dir.R:
             return (i, j + n)
+        elif self == Dir.U:
+            return (i - n, j)
+        elif self == Dir.D:
+            return (i + n, j)
 
 
 class Grid:
@@ -33,9 +33,6 @@ class Grid:
         else:
             return default
 
-    def get_offset(self, i, j, d, num=1):
-        pass
-
     def set(self, i, j, x):
         self.update(i, j, lambda _: x)
 
@@ -48,8 +45,28 @@ class Grid:
     def filled(w, h, default=None):
         return Grid([[default] * w for _ in range(h)])
 
+    @staticmethod
+    def from_str(s, chr_to_v=lambda c: c):
+        lines = None
+        if isinstance(s, str):
+            lines = s.split("\n")
+        else:
+            # assuming this is an iter of strs, one per row
+            lines = s
+
+        return Grid([[chr_to_v(c) for c in row] for row in lines])
+
+    def enumerate_iter(self):
+        return (((i, j), self.get(i, j)) for i in range(self.h) for j in range(self.w))
+
+    def __iter__(self):
+        return (self.get(i, j) for i in range(self.h) for j in range(self.w))
+
     def __repr__(self):
         return f"Grid(w={self.w},h={self.h},arr={self.arr})"
 
-    def __str__(self, h_join="", v_join="\n"):
-        return v_join.join(map(h_join.join, self.arr))
+    def __str__(self):
+        return self.pprint()
+
+    def pprint(self, h_join="", v_join="\n", v_to_chr=str):
+        return v_join.join(map(h_join.join, map(lambda r: map(v_to_chr, r), self.arr)))
