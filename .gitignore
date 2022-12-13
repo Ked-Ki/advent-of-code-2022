@@ -1,8 +1,9 @@
 # advent of code inputs are personalized
 inputs/
 
-# ctags
+# vim "ide" stuff
 tags
+.localvimrc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

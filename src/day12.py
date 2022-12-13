@@ -2,6 +2,7 @@ from util.grid import Grid, Dir
 import collections
 import util.logging as log
 import functools as ft
+import itertools as it
 
 
 def find_grid(g, c):
@@ -12,6 +13,16 @@ def find_grid(g, c):
             found = idx
             break
     return found
+
+
+def pprint_visited(visited):
+    def v_to_chr(v):
+        if v is None:
+            return " " * 3
+        else:
+            return f"{v:3d}"
+
+    return visited.pprint(h_join=",", v_to_chr=v_to_chr)
 
 
 def part1(strs):
@@ -65,15 +76,6 @@ def part1(strs):
                 to_visit.appendleft((n, p_len + 1))
             return (idx, p_len)
 
-    def pprint_visited(visited):
-        def v_to_chr(v):
-            if v is None:
-                return " " * 3
-            else:
-                return f"{v:3d}"
-
-        return visited.pprint(h_join=",", v_to_chr=v_to_chr)
-
     while to_visit_f or to_visit_b:
         log.p1_log.debug(f"loop forward start: {to_visit_f=}")
         f_idx, f_p_len = visit_next(to_visit_f, visited_f, f_reach, "forward")
@@ -93,4 +95,51 @@ def part1(strs):
 
 
 def part2(strs):
-    pass
+    grid = Grid.from_str(strs)
+
+    start_idx = find_grid(grid, "S")
+    end_idx = find_grid(grid, "E")
+
+    grid.set(*start_idx, "a")
+    grid.set(*end_idx, "z")
+
+    visited = Grid.filled(grid.w, grid.h, default=None)
+
+    for idx, c in grid.enumerate_iter():
+        if c == "a":
+            visited.set(*idx, 0)
+
+    def i_to_chr(i):
+        return chr(ord("a") + i)
+
+    for h in map(i_to_chr, it.chain(range(1, 26), it.cycle(range(25, 0, -1)))):
+        for idx, _ in filter(lambda p: p[1] == h, grid.enumerate_iter()):
+            log.p2_log.debug(f"loop {idx=}, {h=}")
+
+            if visited.get(*idx) is not None:
+                continue
+
+            neighbor_v = []
+            for d in Dir:
+                n_idx = d.add(*idx)
+                if not grid.inbounds(*n_idx):
+                    continue
+                n_h = grid.get(*n_idx)
+                n_v = visited.get(*n_idx)
+                log.p2_log.debug(f"{n_idx=} {n_h=} {n_v=}")
+                if ord(n_h) < ord(h) - 1:
+                    continue
+                if n_v is not None:
+                    neighbor_v.append(n_v)
+
+            log.p2_log.debug(f"{neighbor_v}")
+
+            if len(neighbor_v) > 0:
+                p_len = min(neighbor_v)
+                log.p2_log.debug("visited {idx=} {p_len=}")
+                visited.set(*idx, p_len + 1)
+                if idx == end_idx:
+                    log.p2_log.debug("reached end {p_len=}")
+                    return p_len + 1
+
+        log.p2_log.debug(f"visited:\n{pprint_visited(visited)}")
