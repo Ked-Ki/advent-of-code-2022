@@ -1,5 +1,7 @@
 import itertools as it
+import functools as ft
 import util.logging as log
+import bisect
 
 
 def parse_list(p):
@@ -75,4 +77,15 @@ def part1(strs):
 
 
 def part2(strs):
-    pass
+    div1 = "[[2]]"
+    div2 = "[[6]]"
+
+    all_packets = it.chain((div1, div2), filter(lambda s: s != "", strs))
+    key_f = ft.cmp_to_key(compare_pair)
+    sorted_packets = sorted(all_packets, key=key_f)
+    log.p2_log.debug(f"{sorted_packets=}")
+
+    div1_i = bisect.bisect_right(sorted_packets, key_f(div1), key=key_f)
+    div2_i = bisect.bisect_right(sorted_packets, key_f(div2), key=key_f)
+    log.p2_log.debug(f"{div1_i=}, f{div2_i=}")
+    return div1_i * div2_i
