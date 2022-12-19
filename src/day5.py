@@ -56,7 +56,7 @@ def parse_move(s):
     return Move(cnt, from_s - 1, to_s - 1)
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     cs, mvs = parse(ls)
 
     log.p1_log.debug(f"{cs=}, {mvs=}")
@@ -68,7 +68,7 @@ def part1(ls):
     return "".join([c[-1] for c in cs])
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     cs, mvs = parse(ls)
 
     for mv in mvs:

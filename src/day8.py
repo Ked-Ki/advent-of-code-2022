@@ -5,7 +5,7 @@ from util.moreiters import takewhile_inclusive
 from util.grid import Grid, Dir, add_dir
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     grid = Grid.from_str(ls, chr_to_v=int)
     blocks = {d: Grid.filled(grid.w, grid.h, default=0) for d in ["L", "D", "U", "R"]}
 
@@ -35,7 +35,7 @@ def part1(ls):
     return len(LU_vis | RD_vis)
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     grid = Grid.from_str(ls, chr_to_v=int)
 
     max_score = 0

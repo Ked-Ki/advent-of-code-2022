@@ -102,14 +102,14 @@ def simulate(monkeys, num_rounds):
         log.p1_log.debug(f"round {round_n} end: {monkeys=}")
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     monkeys = parse(ls, ReprFunc(lambda w: w // 3, "(w//3)"))
     simulate(monkeys, 20)
     m1, m2 = moreiters.top_n((m.inspect_count for m in monkeys), 2)
     return m1 * m2
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     monkeys = parse(ls, None)
 
     # in this part the worry levels get very large, reduce mod lcm

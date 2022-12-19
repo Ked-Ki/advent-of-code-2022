@@ -71,7 +71,14 @@ def get_input(day_num, use_sample):
                 part1_ans = answers[0] if answers[0] != "None" else None
                 part2_ans = answers[1] if answers[1] != "None" else None
 
-        yield (in_path, part1_ans, part2_ans)
+        # read args if present
+        args = {}
+        args_file = os.path.join(dir_name, f"args{in_tag}")
+        if os.path.exists(args_file):
+            with open(args_file) as f:
+                args = json.loads(f.read())
+
+        yield (in_path, part1_ans, part2_ans, args)
 
     if not found_input:
         raise DayNotFoundError(f"couldn't find any inputs in {dir_name}")
@@ -101,14 +108,14 @@ def get_status(result, ans):
         return colorize(f"(FAIL) {ans}", tty_red)
 
 
-def run_day(in_path, part1_ans, part2_ans):
+def run_day(in_path, part1_ans, part2_ans, args):
     with open(in_path) as f:
         print(f"{colorize('input:',tty_blu)} {in_path}")
         part1_in, part2_in = itertools.tee(map(lambda s: s.rstrip("\n"), f.readlines()))
-        part1_res = day.part1(part1_in)
+        part1_res = day.part1(part1_in, **args)
         part1_stat = get_status(part1_res, part1_ans)
         print(f"{colorize('part 1:',tty_blu)} {part1_res} {part1_stat}")
-        part2_res = day.part2(part2_in)
+        part2_res = day.part2(part2_in, **args)
         part2_stat = get_status(part2_res, part2_ans)
         print(f"{colorize('part 2:',tty_blu)} {part2_res} {part2_stat}")
 

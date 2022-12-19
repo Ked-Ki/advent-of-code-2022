@@ -57,7 +57,7 @@ def score_round(them, us):
     return round_score
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     score = 0
     for s in ls:
         shapes = s.split()
@@ -72,7 +72,7 @@ def part1(ls):
     return score
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     score = 0
     for s in ls:
         shapes = s.split()

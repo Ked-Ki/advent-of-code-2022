@@ -63,7 +63,7 @@ def build_file_tree(lines):
     return root_node
 
 
-def part1(lines):
+def part1(lines, **_kw_args):
     file_tree = build_file_tree(lines)
 
     return sum(
@@ -71,7 +71,7 @@ def part1(lines):
     )
 
 
-def part2(lines):
+def part2(lines, **_kw_args):
     file_tree = build_file_tree(lines)
 
     total_space = 70000000

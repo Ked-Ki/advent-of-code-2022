@@ -30,7 +30,7 @@ class State:
             self.run_addx(int(i))
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     out = 0
 
     def tick_hook(st):
@@ -47,7 +47,7 @@ def part1(ls):
     return out
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     crt = Grid.filled(40, 6, default=".")
 
     pixel = 0

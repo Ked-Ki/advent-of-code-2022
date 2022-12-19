@@ -62,7 +62,7 @@ def compare_pair(p1, p2):
         return compare_pair(p1, f"[{p2}]")
 
 
-def part1(strs):
+def part1(strs, **_kw_args):
     pair_idx = 0
     correct_order = []
     while pair := list(it.takewhile(lambda s: s != "", strs)):
@@ -76,7 +76,7 @@ def part1(strs):
     return sum(correct_order)
 
 
-def part2(strs):
+def part2(strs, **_kw_args):
     div1 = "[[2]]"
     div2 = "[[6]]"
 

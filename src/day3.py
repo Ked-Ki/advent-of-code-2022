@@ -15,7 +15,7 @@ def chr_to_int(c):
         return ord(c) - ord("A") + 1 + 26
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     total = 0
     for c1, c2 in map(split_l, ls):
         shared = set(c1) & set(c2)
@@ -26,7 +26,7 @@ def part1(ls):
     return total
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     total = 0
     while group := list(islice(ls, 3)):
         shared = reduce(set.intersection, map(set, group))

@@ -23,7 +23,7 @@ def parse(strs):
     return scan_grid
 
 
-def part1(strs):
+def part1(strs, **_kw_args):
     scan_grid = parse(strs)
 
     BLOCKED = "blocked"
@@ -65,7 +65,7 @@ def part1(strs):
     return num_sands
 
 
-def part2(strs):
+def part2(strs, **_kw_args):
     scan_grid = parse(strs)
 
     (l_bound, _), (r_bound, max_depth) = scan_grid.bounds()

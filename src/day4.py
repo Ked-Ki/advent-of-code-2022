@@ -13,7 +13,7 @@ def included(r1, r2):
     )
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     return sum(1 for rs in map(parse_l, ls) if included(*rs))
 
 
@@ -23,5 +23,5 @@ def overlap(r1, r2):
     )
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     return sum(1 for rs in map(parse_l, ls) if overlap(*rs))

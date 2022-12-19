@@ -25,7 +25,7 @@ def pprint_visited(visited):
     return visited.pprint(h_join=",", v_to_chr=v_to_chr)
 
 
-def part1(strs):
+def part1(strs, **_kw_args):
     grid = Grid.from_str(strs)
 
     start_idx = find_grid(grid, "S")
@@ -94,7 +94,7 @@ def part1(strs):
         log.p1_log.debug(f"visited_b:\n{pprint_visited(visited_b)}")
 
 
-def part2(strs):
+def part2(strs, **_kw_args):
     grid = Grid.from_str(strs)
 
     start_idx = find_grid(grid, "S")

@@ -17,9 +17,9 @@ def run(ls, mark_len):
     return r_idx
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     return run(next(ls), 4)
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     return run(next(ls), 14)

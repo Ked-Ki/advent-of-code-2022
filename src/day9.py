@@ -55,9 +55,9 @@ def run(length, ls):
     return len(vis)
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     return run(2, ls)
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     return run(10, ls)

@@ -10,9 +10,9 @@ def run(elves, num=1):
     return top_n(sum_it(), num)
 
 
-def part1(ls):
+def part1(ls, **_kw_args):
     return sum(run(ls))
 
 
-def part2(ls):
+def part2(ls, **_kw_args):
     return sum(run(ls, num=3))
