@@ -22,6 +22,17 @@ class Dir(Enum):
     def is_h(self):
         return self == Dir.L or self == Dir.R
 
+    def op(self):
+        match self:
+            case Dir.L:
+                return Dir.R
+            case Dir.R:
+                return Dir.L
+            case Dir.U:
+                return Dir.D
+            case Dir.D:
+                return Dir.U
+
 
 class Index:
     def __init__(self, h, w, c1_dir=Dir.D, c2_dir=Dir.R, z1=0, z2=0):
@@ -52,6 +63,10 @@ class Index:
             return c[::-1]
         else:
             return c
+
+    def bounds(self):
+        c1_l, c2_l = self._flip_if(self.h, self.w)
+        return ((self.z1, self.z2), (self.z1 + c1_l - 1, self.z2 + c2_l - 1))
 
     def g_coord(self, c1, c2):
         i, j = self._flip_if(c1 - self.z1, c2 - self.z2)
@@ -125,6 +140,20 @@ def add_dir(d, c1, c2, n=1, index=IJ_INDEX):
     return (c1_new, c2_new)
 
 
+def dir_to(a1, a2, b1, b2, index=IJ_INDEX):
+    diff1 = b1 - a1
+    if diff1 > 0:
+        return index["c1_dir"]
+    elif diff1 < 0:
+        return index["c1_dir"].op()
+    diff2 = b2 - a2
+    if diff2 > 0:
+        return index["c2_dir"]
+    elif diff2 < 0:
+        return index["c2_dir"].op()
+    return None
+
+
 class Grid:
     def __init__(self, arr, index_args=IJ_INDEX):
         self.arr = arr
@@ -143,6 +172,9 @@ class Grid:
 
     def _inbounds(self, i, j):
         return i >= 0 and i < self._index.h and j >= 0 and j < self._index.w
+
+    def bounds(self):
+        return self._index.bounds()
 
     def get(self, c1, c2, default=None, resize=False):
         i, j = self._index.g_coord(c1, c2)
