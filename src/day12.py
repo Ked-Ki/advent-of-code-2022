@@ -1,4 +1,4 @@
-from util.grid import Grid, Dir
+from util.grid import Grid, Dir, add_dir
 import collections
 import util.logging as log
 import functools as ft
@@ -47,7 +47,7 @@ def part1(strs):
 
     def find_new_neighbors(i, j, is_reachable, visit_grid):
         for d in Dir:
-            idx = d.add(i, j)
+            idx = add_dir(d, i, j)
             v = grid.get(*idx)
             v_g = visit_grid.get(*idx)
 
@@ -121,7 +121,7 @@ def part2(strs):
 
             neighbor_v = []
             for d in Dir:
-                n_idx = d.add(*idx)
+                n_idx = add_dir(d, *idx)
                 if not grid.inbounds(*n_idx):
                     continue
                 n_h = grid.get(*n_idx)

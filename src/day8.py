@@ -2,7 +2,7 @@ import util.logging as log
 import functools
 import itertools as itool
 from util.moreiters import takewhile_inclusive
-from util.grid import Grid, Dir
+from util.grid import Grid, Dir, add_dir
 
 
 def part1(ls):
@@ -15,8 +15,8 @@ def part1(ls):
     for i in range(grid.h):
         for j in range(grid.w):
             t = grid.get(i, j)
-            l_blk = blocks["L"].get(*Dir.L.add(i, j), default=-1)
-            u_blk = blocks["U"].get(*Dir.U.add(i, j), default=-1)
+            l_blk = blocks["L"].get(*add_dir(Dir.L, i, j), default=-1)
+            u_blk = blocks["U"].get(*add_dir(Dir.U, i, j), default=-1)
             if l_blk < t or u_blk < t:
                 LU_vis.add((i, j))
             blocks["L"].set(i, j, max(l_blk, t))
@@ -25,8 +25,8 @@ def part1(ls):
     for i in range(grid.h - 1, -1, -1):
         for j in range(grid.w - 1, -1, -1):
             t = grid.get(i, j)
-            r_blk = blocks["R"].get(*Dir.R.add(i, j), default=-1)
-            d_blk = blocks["D"].get(*Dir.D.add(i, j), default=-1)
+            r_blk = blocks["R"].get(*add_dir(Dir.R, i, j), default=-1)
+            d_blk = blocks["D"].get(*add_dir(Dir.D, i, j), default=-1)
             if r_blk < t or d_blk < t:
                 RD_vis.add((i, j))
             blocks["R"].set(i, j, max(r_blk, t))
@@ -45,7 +45,7 @@ def part2(ls):
             t = grid.get(i, j)
 
             trees_in_dir = (
-                (grid.get(*d.add(i, j, n=n)) for n in itool.count(1)) for d in Dir
+                (grid.get(*add_dir(d, i, j, n=n)) for n in itool.count(1)) for d in Dir
             )
 
             def filter_visible(ts):
