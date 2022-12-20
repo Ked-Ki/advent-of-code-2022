@@ -85,9 +85,8 @@ def part1(strs, report_row, **_kw_args):
         l = s[0] - (d - v_d)
         r = s[0] + (d - v_d)
         if l <= r:
-            new_range = tuple(sorted((s[0] + (d - v_d), s[0] - (d - v_d))))
-            log.p1_log.debug(f"{s=} {b=} {d=} {v_d=} {new_range=}")
-            blocked_set.insert(new_range)
+            log.p1_log.debug(f"{s=} {b=} {d=} {v_d=} {l=} {r=}")
+            blocked_set.insert((l, r))
         else:
             log.p1_log.debug(f"range empty{s=} {b=} {d=} {v_d=}")
         log.p1_log.debug(f"{blocked_set=} {beacon_set=}")
@@ -95,4 +94,25 @@ def part1(strs, report_row, **_kw_args):
 
 
 def part2(strs, search_bound, **_kw_args):
-    pass
+    sb_list = list(map(parse_line, strs))
+    for y in range(search_bound + 1):
+        log.p2_log.debug(f"searching row {y}")
+        blocked_set = RangeSet()
+        for s, b in sb_list:
+            d = dist(s, b)
+            v_d = abs(s[1] - y)
+            l = max(0, s[0] - (d - v_d))
+            r = min(search_bound, s[0] + (d - v_d))
+            if l <= r:
+                new_range = (l, r)
+                log.p1_log.debug(f"{s=} {b=} {d=} {v_d=} {l=} {r=}")
+                blocked_set.insert((l, r))
+            else:
+                log.p2_log.debug(f"range empty{s=} {b=} {d=} {v_d=}")
+            log.p2_log.debug(f"{blocked_set=}")
+        rng = next(iter(blocked_set))
+        log.p2_log.debug(f"searched row {y}, first range={rng}")
+        if rng != (0, search_bound):
+            # found a gap!
+            x = rng[1] + 1
+            return x * 4000000 + y
