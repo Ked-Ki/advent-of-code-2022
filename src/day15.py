@@ -1,7 +1,9 @@
 import util.logging as log
+import util.morefuncs as mft
 import re
 import bisect
 import itertools as it
+import functools as ft
 
 
 def parse_line(line):
@@ -15,7 +17,9 @@ def parse_line(line):
 
 
 def dist(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+    d = abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+    log.p2_log.debug(f"dist({p1},{p2}) -> {d}")
+    return d
 
 
 class RangeSet:
@@ -93,7 +97,7 @@ def part1(strs, report_row, **_kw_args):
     return blocked_set.size() - len(beacon_set)
 
 
-def part2(strs, search_bound, **_kw_args):
+def part2_rangeset(strs, search_bound):
     sb_list = list(map(parse_line, strs))
     for y in range(search_bound + 1):
         log.p2_log.debug(f"searching row {y}")
@@ -116,3 +120,43 @@ def part2(strs, search_bound, **_kw_args):
             # found a gap!
             x = rng[1] + 1
             return x * 4000000 + y
+
+
+class Predicate:
+    def __init__(self):
+        self.clauses = []
+
+    def add(self, clause):
+        self.clauses.append(clause)
+
+    def run(self, item):
+        log.p2_log.debug(f"running predicate on {item}")
+        result = True
+        for clause in self.clauses:
+            b = clause(item)
+            log.p2_log.debug(f"{clause} {item} -> {b}")
+            result &= b
+        return result
+
+        # return all(clause(item) for clause in self.clauses)
+
+
+def part2_predicate(strs, search_bound):
+    predicate = Predicate()
+    for s, b in map(parse_line, strs):
+        d = dist(s, b)
+        predicate.add(
+            mft.ReprFunc(
+                ft.partial(lambda s_copy, d_copy, p: dist(s_copy, p) > d_copy, s, d),
+                f"dist({s},_) > {d}",
+            )
+        )
+
+    for x in range(search_bound + 1):
+        for y in range(search_bound + 1):
+            if predicate.run((x, y)):
+                return x * 4000000 + y
+
+
+def part2(strs, search_bound, **_kw_args):
+    part2_rangeset(strs, search_bound)
